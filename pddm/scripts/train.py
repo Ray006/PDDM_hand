@@ -12,13 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+############  to search module in current path ###########################
 import os
+import sys
+addr_ = os.getcwd()
+sys.path.append(addr_)
+############  to search module in current path ###########################
+
 os.environ["MKL_THREADING_LAYER"] = "GNU"
 import numpy as np
 import numpy.random as npr
 import tensorflow as tf
 import pickle
-import sys
 import argparse
 import traceback
 
@@ -124,6 +129,22 @@ def run_job(args, save_dir=None):
                 rollouts_valRand = collect_random_rollouts(
                     env, random_policy, args.num_rand_rollouts_val,
                     args.rand_rollout_length, dt_from_xml, args)
+
+            ######################### PickAndPlace demo #################################
+            # demo = False
+            demo = True
+            if demo:
+                from ipdb import set_trace
+                set_trace()
+                demo_paths = pickle.load(open('pddm/scripts/demonstrations/relocate-v0_demos.pickle', 'rb'))
+
+                for demo_path in demo_paths:
+                    obs = demo_path['observations']
+                    act = demo_path['actions']
+                    rollout = Rollout(np.array(obs), np.array(act))
+                    rollouts_trainRand.append(rollout)
+            ######################### PickAndPlace demo #################################
+
 
             #convert (rollouts --> dataset)
             dataset_trainRand = data_processor.convertRolloutsToDatasets(

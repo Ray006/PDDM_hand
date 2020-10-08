@@ -72,4 +72,5 @@ class MBEnvWrapper:
             return obs
 
     def step(self, action):
-        return self.unwrapped_env.step(action)
+        return self.unwrapped_env._step(action)    # for hand
+        # return self.unwrapped_env.step(action)    # for pddm paper

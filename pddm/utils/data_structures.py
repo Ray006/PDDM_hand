@@ -58,7 +58,7 @@ class Rollout:
                  starting_state=None):
         self.states = observations.copy()
         self.actions = actions.copy()
-        self.rewards_per_step = rewards_per_step.copy()
+        self.rewards_per_step = rewards_per_step
         self.starting_state = starting_state
 
 

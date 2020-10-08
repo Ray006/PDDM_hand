@@ -38,6 +38,11 @@ class CollectSamples(object):
         num_workers = multiprocessing.cpu_count()  #detect number of cores
         pool = multiprocessing.Pool(8)
 
+        # from ipdb import set_trace
+        # set_trace()
+        # x=self.do_rollout(steps_per_rollout, num_rollouts, visualization_frequency)
+
+
         #multiprocessing for running rollouts (utilize multiple cores)
         for rollout_number in range(num_rollouts):
             result = pool.apply_async(
@@ -55,6 +60,8 @@ class CollectSamples(object):
 
     def do_rollout(self, steps_per_rollout, rollout_number, visualization_frequency):
 
+
+
         #init vars
         observations = []
         actions = []
@@ -63,14 +70,17 @@ class CollectSamples(object):
         #reset env
         observation, starting_state = self.env.reset(return_start_state=True)
 
+        # from ipdb import set_trace
+        # set_trace()
+
         prev_action = None
         for step_num in range(steps_per_rollout):
-
             #decide what action to take
             if self.is_random:
-                action, _ = self.policy.get_action(observation, prev_action, self.random_sampling_params)
+                pass
             else:
                 action, _ = self.policy.get_action(observation)
+            action, _ = self.policy.get_action(observation, prev_action, self.random_sampling_params)
 
             #keep tracks of observations + actions
             observations.append(observation)
@@ -80,8 +90,7 @@ class CollectSamples(object):
             #perform the action
             next_observation, reward, terminal, _ = self.env.step(action)
             rewards_per_step.append(reward)
-
-            #update the observation
+            # update the observation
             observation = np.copy(next_observation)
 
         if (rollout_number%visualization_frequency)==0:

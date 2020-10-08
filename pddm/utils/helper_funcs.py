@@ -24,6 +24,7 @@ from matplotlib import rc
 rc('font', **{'family': 'serif', 'serif': ['Palatino']})
 
 import pddm.envs
+import pddm.mj_envs
 from pddm.envs.gym_env import GymEnv
 from pddm.envs.mb_env import MBEnvWrapper
 from pddm.utils.data_structures import *
@@ -35,9 +36,12 @@ from pddm.utils.data_structures import *
 
 
 def create_env(env_name):
+    # from ipdb import set_trace
+    # set_trace()
 
     # setup environment
     env = MBEnvWrapper(GymEnv(env_name))
+
 
     # dimensions
     dt_from_xml = env.unwrapped_env.skip * env.unwrapped_env.model.opt.timestep
@@ -212,6 +216,9 @@ def collect_random_rollouts(env,
 
     #collect rollouts
     rollouts = c.collect_samples(num_rollouts, rollout_length)
+
+    # from ipdb import set_trace
+    # set_trace()
 
     #done
     print("Performed ", len(rollouts), " rollouts, each with ",
